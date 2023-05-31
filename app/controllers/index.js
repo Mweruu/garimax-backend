@@ -9,7 +9,7 @@ const registerUser = async (req, res) => {
             lastName: req.body.lastName,
             email: req.body.email,
             mobile: req.body.mobile,
-            password: bycrypt.hashSync(req.body.password, 10)
+            passwordHash: bycrypt.hashSync(req.body.password, 10)
         });
         return res.status(201).json({
             user,
@@ -28,12 +28,12 @@ const loginUser = async (req, res) => {
                 error: `User not found`,
                 success: false})
         }
-        if(user && bycrypt.compareSync(req.body.password, user.password)){
+        if(user && bycrypt.compareSync(req.body.passwordHash, user.passwordHash)){
             const secret = process.env.SECRET
             const token = jwt.sign(
                 {
                     userId: user.id,
-                    // isAdmin: user.isAdmin
+                    isAdmin: user.isAdmin
                 },
                 secret,
                 {expiresIn: '1d'}
