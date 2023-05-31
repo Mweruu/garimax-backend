@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 // Create and Save a new User
 const registerUser = async (req, res) => {
     try {
-        const user = await models.User.create({
+        const user = await models.user.create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
 // Login User
 const loginUser = async (req, res) => {
     try{
-        const user = await models.User.findOne({ where: { email: req.body.email }});
+        const user = await models.user.findOne({ where: { email: req.body.email }});
         if(!user){
             return res.status(400).json({
                 error: `User not found`,
@@ -56,7 +56,7 @@ const loginUser = async (req, res) => {
 // Retrieve all User from the database.
 const getAllUsers = async (req, res) => {
     try {
-        const user = await models.User.findAll({});
+        const user = await models.user.findAll({});
         return res.status(201).json({
             user,
         });

@@ -1,5 +1,3 @@
-const User = require("./user");
-
 module.exports = (sequelize, DataTypes) => {
     const CopVendor = sequelize.define('copVendor',{
       companyName: {
@@ -28,18 +26,18 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: {
         type: DataTypes.DATE,
-        defaultValue: false
+        defaultValue: null
       },
       updatedAt: {
         type: DataTypes.DATE,
-        defaultValue: false
+        defaultValue: null
       }
     }, {});
       CopVendor.associate = function(models) {
         // associations can be defined here
-        CopVendor.belongsTo(models.User, {
+        CopVendor.belongsTo(models.user, {
             foreignKey: 'userId'
-          })
+          });
       };
     return CopVendor;
 };

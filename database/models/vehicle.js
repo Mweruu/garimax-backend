@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-    const Vehicle = sequelize.define('Vehicle',{
+    const Vehicle = sequelize.define('vehicle',{
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -65,16 +65,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: {
         type: DataTypes.DATE,
-        defaultValue: false
+        defaultValue: null
       },
       updatedAt: {
         type: DataTypes.DATE,
-        defaultValue: false
+        defaultValue: null
       }
     }, {});
         Vehicle.associate = function(models) {
             // associations can be defined here
-            Vehicle.belongsTo(models.User, {
+            Vehicle.belongsTo(models.user, {
                 foreignKey: 'userId'
               })
         };
