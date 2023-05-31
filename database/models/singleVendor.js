@@ -14,16 +14,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: {
         type: DataTypes.DATE,
-        defaultValue: false
+        defaultValue: null
       },
       updatedAt: {
         type: DataTypes.DATE,
-        defaultValue: false
+        defaultValue: null
       }
     }, {});
       SingleVendor.associate = function(models) {
         // associations can be defined here
-        SingleVendor.belongsTo(models.User, {
+        SingleVendor.belongsTo(models.user, {
             foreignKey: 'userId'
           })
       };

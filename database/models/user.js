@@ -34,30 +34,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     createdAt: {
       type: DataTypes.DATE,
-      defaultValue: false
+      defaultValue: null
     },
     updatedAt: {
       type: DataTypes.DATE,
-      defaultValue: false
+      defaultValue: null
     }
   }, {});
     User.associate = function(models) {
       // associations can be defined here
-      User.hasOne(models.SingleVendor, {
-        foreignKey: 'userId',
-        as: 'singleVendor',
-        onDelete: 'CASCADE',
-      });
-      User.hasOne(models.CopVendor, {
-        foreignKey: 'userId',
-        as: 'copVendor',
-        onDelete: 'CASCADE',
-      });
-      User.hasMany(models.Vehicle, {
-        foreignKey: 'userId',
-        as: 'vehicles',
-        onDelete: 'CASCADE',
-      });
+      User.hasOne(models.singleVendor, {
+        foreignKey: 'userId' });
+      User.hasOne(models.copVendor, {
+        foreignKey: 'userId' });
+      User.hasMany(models.vehicle, {
+        foreignKey: 'userId' });
     };
   return User;
 };
