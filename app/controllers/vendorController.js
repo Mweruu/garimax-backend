@@ -31,8 +31,8 @@ const registerCoUser = async (req, res) => {
     try {
         let coVendor = null;
         const user = await models.user.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            firstName: req.body.companyName,
+            lastName: req.body.companyName,
             email: req.body.email,
             mobile: req.body.mobile,
             passwordHash: bycrypt.hashSync(req.body.password, 10)
