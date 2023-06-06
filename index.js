@@ -14,7 +14,7 @@ const vehicleRouter = require('./app/controllers/vehicleController');
 // parse requests of content-type - application/json
 app.use(express.json());
 app.use('/api', routes);
-app.use('/api/addVehicle', vehicleRouter);
+app.use('/api', vehicleRouter);
 // app.use(cors(corsOptions));
 app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
