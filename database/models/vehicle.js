@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Vehicle = sequelize.define('vehicle',{
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
         allowNull: false
       },

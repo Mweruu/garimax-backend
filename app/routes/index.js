@@ -8,5 +8,7 @@ router.post('/users/login', controllers.userController.loginUser);
 router.get('/users', controllers.userController.getAllUsers);
 router.post('/singleVendor/register', controllers.vendorController.registerSingleUser);
 router.post('/coVendor/register', controllers.vendorController.registerCoUser);
+router.get('/getVehicles', controllers.vehicleControler.getAllVehicles);
+router.post('/addVehicle', controllers.vehicleControler.addVehicle);
 
 module.exports = router;
