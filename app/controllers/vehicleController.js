@@ -41,8 +41,8 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
         let imagePath = '';
         const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
         files = req.files
+        file = req.files[0] || null;
         files.map((el) => {
-            if(el.fieldname === 'image') { file = el}
             imagesPaths.push(`${basePath}${el.filename}`);
         });
         if (!file) return res.status(400).send({message:'No image in the request'});
