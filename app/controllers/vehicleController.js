@@ -32,16 +32,24 @@ const storage = multer.diskStorage({
 const uploadOptions = multer({ storage: storage });
 
 // Create and Save a new User
-router.post('/', uploadOptions.single('image'), async (req, res) => {
+router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
     try {
-        const file = req.file;
-        if (!file) return res.status(400).send({message:'No image in the request'});
-
-        const fileName = file.filename;
+        // manage image upload
+        let file = null;
+        let files = [];
+        let imagesPaths = [];
+        let imagePath = '';
         const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-        console.log(req.body.userId)
-        const user = await models.user.findByPk(req.body.userId);
-            
+        files = req.files
+        file = req.files[0] || null;
+        files.map((el) => {
+            imagesPaths.push(`${basePath}${el.filename}`);
+        });
+        if (!file) return res.status(400).send({message:'No image in the request'});
+        imagePath = `${basePath}${file.filename}`; 
+
+        // get and check user
+        const user = await models.user.findByPk(req.body.userId);   
         if(!user){
             return res.status(500).json({success: false, message: 'valid user required'})
         }
@@ -49,7 +57,8 @@ router.post('/', uploadOptions.single('image'), async (req, res) => {
             id: randomUUID(),
             userId: req.body.userId,
             model: req.body.model,
-            image: `${basePath}${fileName}`,
+            image: imagePath,
+            images: imagesPaths, 
             make: req.body.make,
             location: req.body.location,
             price: req.body.price,
@@ -64,14 +73,15 @@ router.post('/', uploadOptions.single('image'), async (req, res) => {
             localUsed: req.body.localUsed,
             additionalFeatures: req.body.additionalFeatures
         });
-        return res.status(201).json({ vehicle});
+        return res.status(201).json({ vehicle });
     } catch (error) {
         return res.status(500).json({error: error.message})
     }
 });
 
+
 // Retrieve all Vehicles from the database.
-router.get('/', async (req, res) => {
+router.get('/getVehicles', async (req, res) => {
     try {
         const vehicles = await models.vehicle.findAll({});
         return res.status(201).json({

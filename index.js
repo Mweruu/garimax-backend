@@ -12,11 +12,11 @@ const vehicleRouter = require('./app/controllers/vehicleController');
 //   origin: "http://localhost:8081"
 // };
 // parse requests of content-type - application/json
+app.use(cors());
 app.use(express.json());
 app.use(cors());
 app.use('/api', routes);
-app.use('/api/addVehicle', vehicleRouter);
-// app.use(cors(corsOptions));
+app.use('/api', vehicleRouter);
 app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 
