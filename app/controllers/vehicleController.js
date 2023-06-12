@@ -33,6 +33,7 @@ const uploadOptions = multer({ storage: storage });
 
 // Create and Save a new User
 router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
+    console.log(req.body , "image", req.files)
     try {
         // manage image upload
         let file = null;
@@ -41,15 +42,18 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
         let imagePath = '';
         const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
         files = req.files
-        file = req.files[0] || null;
+        file = files[0] || null;
         files.map((el) => {
+            console.log("Data", el)
             imagesPaths.push(`${basePath}${el.filename}`);
         });
         if (!file) return res.status(400).send({message:'No image in the request'});
-        imagePath = `${basePath}${file.filename}`; 
+        imagePath = `${basePath}${file.filename}`;
+        console.log(req.body)
 
         // get and check user
-        const user = await models.user.findByPk(req.body.userId);   
+        const user = await models.user.findByPk(req.body.userId);
+        console.log("Got here!!")   
         if(!user){
             return res.status(500).json({success: false, message: 'valid user required'})
         }
@@ -89,6 +93,24 @@ router.get('/getVehicles', async (req, res) => {
         });
     } catch (error) {
         return res.status(500).json({error: error.message})
+    }
+});
+
+router.get(`/getVehicle/:id`, async (req, res) =>{
+    const id = req.params.id;
+    try{
+        const vehicle = await models.vehicle.findByPk(id);
+        if(!vehicle) {
+            return res.status(500).json({
+                error: `Vehicle can not be found`,
+                success: false})
+        } 
+        res.status(200).json(vehicle);
+    } catch(err){
+        res.status(400).json({
+            error: err.message,
+            success: false 
+        });
     }
 });
 
