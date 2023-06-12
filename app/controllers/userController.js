@@ -38,7 +38,8 @@ const loginUser = async (req, res) => {
                 secret,
                 {expiresIn: '1d'}
             )
-            res.send({ message: 'User Authenticated',
+            res.send({  message: 'User Authenticated',
+                        user,
                         token,
                         success: true });
         }else {
