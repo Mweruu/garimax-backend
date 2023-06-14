@@ -1,5 +1,6 @@
 const models = require("../../database/models");
 const express = require('express');
+const User = require("../../database/models/user");
 const router = express.Router();
 const { randomUUID } = require('crypto');
 const { param } = require("../routes");
@@ -87,7 +88,9 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
 // Retrieve all Vehicles from the database.
 router.get('/getVehicles', async (req, res) => {
     try {
-        const vehicles = await models.vehicle.findAll({});
+        const vehicles = await models.vehicle.findAll({
+            include: models.user
+            });
         return res.status(201).json({
             vehicles,
         });
