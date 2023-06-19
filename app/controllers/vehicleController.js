@@ -42,10 +42,11 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
         let files = [];
         let imagesPaths = [];
         let imagePath = '';
+        let basePath;
         if(env === 'production'){
-            const basePath = `${req.protocol}://${req.get('host')}/garimax-backend/public/uploads/`;
+            basePath = `${req.protocol}://${req.get('host')}/garimax-backend/public/uploads/`;
         }else {
-            const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+            basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
         }
         files = req.files
         file = files[0] || null;
