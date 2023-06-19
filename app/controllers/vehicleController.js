@@ -5,6 +5,7 @@ const router = express.Router();
 const { randomUUID } = require('crypto');
 const { param } = require("../routes");
 const multer = require('multer');
+const env = process.env.NODE_ENV
 
 
 const FILE_TYPE_MAP = {
@@ -41,7 +42,12 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
         let files = [];
         let imagesPaths = [];
         let imagePath = '';
-        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+        if(env === 'production'){
+            const path = env.PATH
+            const basePath = `${req.protocol}://${req.get('host')}/${PATH}/public/uploads/`;
+        }else {
+            const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+        }
         files = req.files
         file = files[0] || null;
         files.map((el) => {
