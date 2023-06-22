@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       fuelType: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       steering: {
         type: DataTypes.STRING,
@@ -100,7 +100,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       isSold: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         default: false
       },
       condition: {
