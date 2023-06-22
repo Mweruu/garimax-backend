@@ -90,12 +90,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       isVerified: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         default: false
       },
-      iaDutyPaid: {
+      isDutyPaid: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         default: false,
       },
       isSold: {
