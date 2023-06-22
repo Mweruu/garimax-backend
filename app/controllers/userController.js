@@ -1,6 +1,7 @@
 const models = require("../../database/models");
 const bycrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 
 // upload profile image
 const FILE_TYPE_MAP = {
