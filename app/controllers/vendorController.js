@@ -9,7 +9,7 @@ const registerSingleUser = async (req, res) => {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
-            mobile: req.body.mobile,
+            phoneNumber: req.body.phoneNumber,
             passwordHash: bycrypt.hashSync(req.body.password, 10)
         });
         if(user){
@@ -35,7 +35,7 @@ const registerCoUser = async (req, res) => {
             firstName: req.body.companyName,
             lastName: req.body.companyName,
             email: req.body.email,
-            mobile: req.body.mobile,
+            phoneNumber: req.body.phoneNumber,
             passwordHash: bycrypt.hashSync(req.body.password, 10)
         });
         if(user){
