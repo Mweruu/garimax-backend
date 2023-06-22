@@ -5,6 +5,10 @@ const jwt = require('jsonwebtoken');
 const registerSingleUser = async (req, res) => {
     try {
         let singleVendor = null;
+        const userExists = await models.user.findOne({ where: { email: req.body.email } });
+        if(userExists){
+            return res.status(404).json({message: 'Email entered already exists'});
+        }
         const user = await models.user.create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -31,6 +35,10 @@ const registerSingleUser = async (req, res) => {
 const registerCoUser = async (req, res) => {
     try {
         let coVendor = null;
+        const userExists = await models.user.findOne({ where: { email: req.body.email } });
+        if(userExists){
+            return res.status(404).json({message: 'Email entered already exists'});
+        }
         const user = await models.user.create({
             firstName: req.body.companyName,
             lastName: req.body.companyName,

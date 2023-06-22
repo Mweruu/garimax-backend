@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
 // Create and Save a new User
 const registerUser = async (req, res) => {
     try {
-        const userExists = await models.user.findOne({ where: { email: req.email } });
+        const userExists = await models.user.findOne({ where: { email: req.body.email } });
         if(userExists){
             return res.status(404).json({message: 'Email entered already exists'});
         }
