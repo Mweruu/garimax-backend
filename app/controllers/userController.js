@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken');
 // Create and Save a new User
 const registerUser = async (req, res) => {
     try {
+        const userExists = await models.user.findOne({ where: { email: req.email } });
+        if(userExists){
+            return res.status(404).json({message: 'Email entered already exists'});
+        }
         const user = await models.user.create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -57,12 +61,59 @@ const loginUser = async (req, res) => {
 // Retrieve all User from the database.
 const getAllUsers = async (req, res) => {
     try {
-        const user = await models.user.findAll({});
+        const users = await models.user.findAll({});
         return res.status(201).json({
-            user,
+            users,
         });
     } catch (error) {
         return res.status(500).json({error: error.message})
+    }
+};
+
+const getSingleUser = async (req, res) => {
+    const id = req.params.id;
+    try{
+        const user = await models.user.findByPk(id);
+        if(!user) {
+            return res.status(500).json({
+                error: `User can not be found`,
+                success: false})
+        } 
+        res.status(200).json(user);
+    } catch(err){
+        res.status(500).json({
+            error: err.message,
+            success: false 
+        });
+    }
+};
+
+const updateUserDetails = async (req, res) => {
+    const userId = req.params.userId;
+    try{
+        const userExists = await models.user.findByPk(userId);
+        if(!userExists) {
+            return res.status(500).json({
+                error: `User does not exist`,
+                success: false})
+        }
+        const user = await models.user.update({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            mobile: req.body.mobile,
+            profileImage: req.body.profileImage,
+            companyUrl: req.body.companyUrl,
+            passwordHash: bycrypt.hashSync(req.body.password, 10)
+        }, {
+            where: { id: userId}
+        });
+        res.status(201).json(user);
+    } catch(err){
+        res.status(500).json({
+            error: err.message,
+            success: false 
+        });
     }
 };
 
@@ -70,4 +121,6 @@ module.exports = {
     registerUser,
     loginUser,
     getAllUsers,
+    getSingleUser,
+    updateUserDetails
 }

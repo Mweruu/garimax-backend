@@ -16,6 +16,7 @@ const registerSingleUser = async (req, res) => {
             singleVendor = await models.singleVendor.create({
                 userId: user.id,
                 passportNo: req.body.passportNo,
+                isVendor: true,
                 gender: req.body.gender
             });
         }
@@ -42,6 +43,7 @@ const registerCoUser = async (req, res) => {
                 userId: user.id,
                 companyName: req.body.companyName,
                 kraPin: req.body.kraPin,
+                isVendor: true,
                 dealerLicense: req.body.dealerLicense,
                 address: req.body.address,
                 location: req.body.location

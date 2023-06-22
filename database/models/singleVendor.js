@@ -8,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      isVendor: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-      },
       createdAt: {
         type: DataTypes.DATE,
         defaultValue: null

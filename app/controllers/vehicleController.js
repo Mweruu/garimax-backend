@@ -68,20 +68,30 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
             id: randomUUID(),
             userId: req.body.userId,
             model: req.body.model,
-            image: imagePath,
-            images: imagesPaths, 
             make: req.body.make,
+            image: imagePath,
+            images: imagesPaths,  
             location: req.body.location,
+            description: req.body.description,
             price: req.body.price,
-            yearOfManufactor: req.body.yearOfManufactor,
+            yearOfManufacture: req.body.yearOfManufacture,
             color: req.body.color,
-            vehicleType: req.body.vehicleType,
-            condition: req.body.condition,
+            bodyType: req.body.bodyType,
+            driveTrain: req.body.driveTrain,
+            inspectionCert: req.body.inspectionCert,
+            usage: req.body.usage,
             transmission: req.body.transmission,
             engineSize: req.body.engineSize,
+            enginePower: req.body.enginePower,
+            fuelType: req.body.fuelType,
+            steering: req.body.steering,
+            vinNumber: req.body.vinNumber,
             mileage: req.body.mileage,
-            foreignUsed: req.body.foreignUsed,
-            localUsed: req.body.localUsed,
+            isVerified: req.body.isVerified,
+            iaDutyPaid: req.body.iaDutyPaid,
+            isSold: req.body.isSold,
+            condition: req.body.condition,
+            accessories: req.body.accessories,
             additionalFeatures: req.body.additionalFeatures
         });
         return res.status(201).json({ vehicle });
@@ -95,7 +105,8 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
 router.get('/getVehicles', async (req, res) => {
     try {
         const vehicles = await models.vehicle.findAll({
-            include: models.user
+            include: models.user,
+            order: [['createdAt', 'DESC']]
             });
         return res.status(201).json({
             vehicles,
@@ -105,7 +116,7 @@ router.get('/getVehicles', async (req, res) => {
     }
 });
 
-router.get(`/getVehicle/:id`, async (req, res) =>{
+router.get('/getVehicle/:id', async (req, res) =>{
     const id = req.params.id;
     try{
         const vehicle = await models.vehicle.findByPk(id);
@@ -122,5 +133,28 @@ router.get(`/getVehicle/:id`, async (req, res) =>{
         });
     }
 });
+
+router.get('/getVendorVehicles/:userId', async (req, res) =>{
+    const userId = req.params.userId;
+    try{
+        // get and check user
+        const user = await models.user.findByPk(userId);   
+        if(!user){
+            return res.status(500).json({success: false, message: 'valid user required'})
+        }
+        const vehicles = await models.vehicle.findAll({
+                            where: { userId }
+                        });
+        res.status(200).json(vehicles);
+    } catch(err){
+        res.status(400).json({
+            error: err.message,
+            success: false 
+        });
+    }
+});
+
+
+
 
 module.exports = router;
