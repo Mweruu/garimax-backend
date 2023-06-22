@@ -1,6 +1,31 @@
 const models = require("../../database/models");
 const bycrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+// upload profile image
+const FILE_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpeg',
+    'image/jpg': 'jpg'
+};
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const isValid = FILE_TYPE_MAP[file.mimetype];
+        let uploadError = new Error('invalid image type');
+
+        if (isValid) {
+            uploadError = null;
+        }
+        cb(uploadError, 'public/uploads');
+    },
+    filename: function (req, file, cb) {
+        const fileName = file.originalname.split(' ').join('-');
+        const extension = FILE_TYPE_MAP[file.mimetype];
+        cb(null, `${fileName}-${Date.now()}.${extension}`);
+    }
+});
+
 // Create and Save a new User
 const registerUser = async (req, res) => {
     try {
@@ -76,7 +101,7 @@ const getSingleUser = async (req, res) => {
         const user = await models.user.findByPk(id);
         if(!user) {
             return res.status(500).json({
-                error: `User can not be found`,
+                error: `User does not exist`,
                 success: false})
         } 
         res.status(200).json(user);
@@ -97,12 +122,20 @@ const updateUserDetails = async (req, res) => {
                 error: `User does not exist`,
                 success: false})
         }
+        const file = req.file;
+        let profileUrl;
+        if (file){
+            const fileName = file.filename;
+            const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+            profileUrl = `${basePath}${fileName}`
+        }
+
         const user = await models.user.update({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
-            mobile: req.body.mobile,
-            profileImage: req.body.profileImage,
+            phoneNumber: req.body.phoneNumber,
+            profileImage: profileUrl || null,
             companyUrl: req.body.companyUrl,
             passwordHash: bycrypt.hashSync(req.body.password, 10)
         }, {
