@@ -119,7 +119,7 @@ const getSingleUser = async (req, res) => {
     }
 };
 
-router.put('/user/updateProfile/:id', uploadOptions.single('image'), async (req, res) => {
+router.put('/user/updateProfile/:userId', uploadOptions.single('image'), async (req, res) => {
     const userId = req.params.userId;
     try{
         const userExists = await models.user.findByPk(userId);
