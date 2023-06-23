@@ -26,11 +26,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       price: {
         type: DataTypes.DECIMAL,
         allowNull: false
       },
-      yearOfManufactor: {
+      yearOfManufacture: {
         type: DataTypes.DATE,
         allowNull: false
       },
@@ -38,12 +42,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      vehicleType: {
+      bodyType: {
         type: DataTypes.STRING,
         allowNull: true
       },
-      condition: {
+      driveTrain: {
         type: DataTypes.STRING,
+        allowNull: true
+      },
+      inspectionCert: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      usage: {
+        type: DataTypes.ENUM,
+        values: ['Locally Used', 'Foreign Used'],
         allowNull: false
       },
       transmission: {
@@ -55,17 +68,49 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
+      enginePower: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      fuelType: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      steering: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      vinNumber: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
       mileage: {
         type: DataTypes.DECIMAL,
         allowNull: false
       },
-      foreignUsed: {
+      isVerified: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      isDutyPaid: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      isSold: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      condition: {
+        type: DataTypes.ENUM,
+        values: ['Used', 'Brand New'],
         allowNull: false
       },
-      localUsed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
+      accessories: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true
       },
       additionalFeatures: {
         type: DataTypes.ARRAY(DataTypes.STRING),

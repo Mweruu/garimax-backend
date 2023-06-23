@@ -7,6 +7,8 @@ const app = express();
 const db = require("./database/models");
 
 const vehicleRouter = require('./app/controllers/vehicleController');
+const router = require('./app/controllers/userController');
+const userRouter = router.router
 
 // var corsOptions = {
 //   origin: "http://localhost:8081"
@@ -17,6 +19,7 @@ app.use(express.json());
 app.use(cors());
 app.use('/api', routes);
 app.use('/api', vehicleRouter);
+app.use('/api', userRouter);
 app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 

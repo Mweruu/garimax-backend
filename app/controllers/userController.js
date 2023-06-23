@@ -1,14 +1,49 @@
 const models = require("../../database/models");
 const bycrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const express = require('express')
+const router = express.Router();
+const multer = require('multer');
+const env = process.env.NODE_ENV
+
+// upload profile image
+const FILE_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpeg',
+    'image/jpg': 'jpg'
+};
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const isValid = FILE_TYPE_MAP[file.mimetype];
+        let uploadError = new Error('invalid image type');
+
+        if (isValid) {
+            uploadError = null;
+        }
+        cb(uploadError, 'public/uploads');
+    },
+    filename: function (req, file, cb) {
+        const fileName = file.originalname.split(' ').join('-');
+        const extension = FILE_TYPE_MAP[file.mimetype];
+        cb(null, `${fileName}-${Date.now()}.${extension}`);
+    }
+});
+
+const uploadOptions = multer({ storage: storage });
+
 // Create and Save a new User
 const registerUser = async (req, res) => {
     try {
+        const userExists = await models.user.findOne({ where: { email: req.body.email } });
+        if(userExists){
+            return res.status(404).json({message: 'Email entered already exists'});
+        }
         const user = await models.user.create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
-            mobile: req.body.mobile,
+            phoneNumber: req.body.phoneNumber,
             passwordHash: bycrypt.hashSync(req.body.password, 10)
         });
         return res.status(201).json({
@@ -57,17 +92,81 @@ const loginUser = async (req, res) => {
 // Retrieve all User from the database.
 const getAllUsers = async (req, res) => {
     try {
-        const user = await models.user.findAll({});
+        const users = await models.user.findAll({});
         return res.status(201).json({
-            user,
+            users,
         });
     } catch (error) {
         return res.status(500).json({error: error.message})
     }
 };
 
+const getSingleUser = async (req, res) => {
+    const id = req.params.id;
+    try{
+        const user = await models.user.findByPk(id);
+        if(!user) {
+            return res.status(500).json({
+                error: `User does not exist`,
+                success: false})
+        } 
+        res.status(200).json(user);
+    } catch(err){
+        res.status(500).json({
+            error: err.message,
+            success: false 
+        });
+    }
+};
+
+router.put('/user/updateProfile/:userId', uploadOptions.single('image'), async (req, res) => {
+    const userId = req.params.userId;
+    try{
+        const userExists = await models.user.findByPk(userId);
+        if(!userExists) {
+            return res.status(500).json({
+                error: `User does not exist`,
+                success: false})
+        }
+        const file = req.file;
+        let profileUrl;
+        let basePath
+        if (file){
+            const fileName = file.filename;
+            if(env === 'production'){
+                basePath = `${req.protocol}://${req.get('host')}/garimax-backend/public/uploads/`;
+            }else {
+                basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+            }
+            profileUrl = `${basePath}${fileName}`
+        }
+
+        console.log(profileUrl);
+        const user = await models.user.update({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            phoneNumber: req.body.phoneNumber,
+            profileImage: profileUrl || null,
+            companyUrl: req.body.companyUrl,
+            // passwordHash: bycrypt.hashSync(req.body.password, 10)
+        }, {
+            where: { id: userId}
+        });
+        res.status(201).json(user);
+    } catch(err){
+        res.status(500).json({
+            error: err.message,
+            success: false 
+        });
+    }
+});
+
+
 module.exports = {
     registerUser,
     loginUser,
     getAllUsers,
+    getSingleUser,
+    router
 }

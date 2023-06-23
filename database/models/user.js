@@ -20,8 +20,24 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    mobile: {
-      type: DataTypes.BIGINT,
+    profileImage: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    companyUrl: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    rating: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    isVendor: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     passwordHash: {
