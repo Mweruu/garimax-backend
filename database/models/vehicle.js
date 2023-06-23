@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       usage: {
         type: DataTypes.ENUM,
-        values: ['Localy Used', 'Foreign Used'],
+        values: ['Locally Used', 'Foreign Used'],
         allowNull: false
       },
       transmission: {

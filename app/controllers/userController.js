@@ -1,7 +1,10 @@
 const models = require("../../database/models");
 const bycrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const express = require('express')
+const router = express.Router();
 const multer = require('multer');
+const env = process.env.NODE_ENV
 
 // upload profile image
 const FILE_TYPE_MAP = {
@@ -26,6 +29,8 @@ const storage = multer.diskStorage({
         cb(null, `${fileName}-${Date.now()}.${extension}`);
     }
 });
+
+const uploadOptions = multer({ storage: storage });
 
 // Create and Save a new User
 const registerUser = async (req, res) => {
@@ -114,7 +119,7 @@ const getSingleUser = async (req, res) => {
     }
 };
 
-const updateUserDetails = async (req, res) => {
+router.put('/user/updateProfile/:id', uploadOptions.single('image'), async (req, res) => {
     const userId = req.params.userId;
     try{
         const userExists = await models.user.findByPk(userId);
@@ -125,12 +130,18 @@ const updateUserDetails = async (req, res) => {
         }
         const file = req.file;
         let profileUrl;
+        let basePath
         if (file){
             const fileName = file.filename;
-            const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+            if(env === 'production'){
+                basePath = `${req.protocol}://${req.get('host')}/garimax-backend/public/uploads/`;
+            }else {
+                basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+            }
             profileUrl = `${basePath}${fileName}`
         }
 
+        console.log(profileUrl);
         const user = await models.user.update({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -149,12 +160,13 @@ const updateUserDetails = async (req, res) => {
             success: false 
         });
     }
-};
+});
+
 
 module.exports = {
     registerUser,
     loginUser,
     getAllUsers,
     getSingleUser,
-    updateUserDetails
+    router
 }
