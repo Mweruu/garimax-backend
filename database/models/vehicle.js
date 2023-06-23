@@ -74,11 +74,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       fuelType: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
       },
       steering: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       vinNumber: {
         type: DataTypes.STRING,
@@ -90,18 +90,18 @@ module.exports = (sequelize, DataTypes) => {
       },
       isVerified: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
-        default: false
+        allowNull: false,
+        defaultValue: false
       },
       isDutyPaid: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
-        default: false,
+        allowNull: false,
+        defaultValue: false,
       },
       isSold: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
-        default: false
+        allowNull: false,
+        defaultValue: false
       },
       condition: {
         type: DataTypes.ENUM,
