@@ -149,7 +149,7 @@ router.put('/user/updateProfile/:userId', uploadOptions.single('image'), async (
             phoneNumber: req.body.phoneNumber,
             profileImage: profileUrl || null,
             companyUrl: req.body.companyUrl,
-            passwordHash: bycrypt.hashSync(req.body.password, 10)
+            // passwordHash: bycrypt.hashSync(req.body.password, 10)
         }, {
             where: { id: userId}
         });
