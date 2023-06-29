@@ -42,6 +42,8 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
         let files = [];
         let imagesPaths = [];
         let imagePath = '';
+        let allAccessories = [];
+        const accessories = req.body.accessories.split(',').map((item) => item.trim());
         let basePath;
         if(env === 'production'){
             basePath = `${req.protocol}://${req.get('host')}/garimax-backend/public/uploads/`;
@@ -53,6 +55,9 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
         files.map((el) => {
             console.log("Data", el)
             imagesPaths.push(`${basePath}${el.filename}`);
+            // allAccessories.push(`${basePath}${el.req.body.accessories}`);
+            allAccessories.push(accessories); // Push the value directly
+
         });
         if (!file) return res.status(400).send({message:'No image in the request'});
         imagePath = `${basePath}${file.filename}`;
@@ -91,7 +96,7 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
             iaDutyPaid: req.body.iaDutyPaid,
             isSold: req.body.isSold,
             condition: req.body.condition,
-            accessories: req.body.accessories,
+            accessories: allAccessories,
             additionalFeatures: req.body.additionalFeatures
         });
         return res.status(201).json({ vehicle });
@@ -119,7 +124,9 @@ router.get('/getVehicles', async (req, res) => {
 router.get('/getVehicle/:id', async (req, res) =>{
     const id = req.params.id;
     try{
-        const vehicle = await models.vehicle.findByPk(id);
+        const vehicle = await models.vehicle.findByPk(id, {
+            include: models.user
+        });
         if(!vehicle) {
             return res.status(500).json({
                 error: `Vehicle can not be found`,
@@ -153,6 +160,81 @@ router.get('/getVendorVehicles/:userId', async (req, res) =>{
         });
     }
 });
+
+router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
+        const id = req.params.id;
+        console.log(req.body , "image", req.files)
+        try {
+            const vehicleExists = await models.vehicle.findByPk(id);
+            if(!vehicleExists) {
+                return res.status(500).json({
+                    error: `Vehicle does not exist`,
+                    success: false})
+            }
+            // manage image upload
+            let file = null;
+            let files = [];
+            let imagesPaths = [];
+            let imagePath = '';
+            let basePath;
+            if(env === 'production'){
+                basePath = `${req.protocol}://${req.get('host')}/garimax-backend/public/uploads/`;
+            }else {
+                basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+            }
+            files = req.files
+            file = files[0] || null;
+            files.map((el) => {
+                console.log("Data", el)
+                imagesPaths.push(`${basePath}${el.filename}`);
+            });
+            if (!file) return res.status(400).send({message:'No image in the request'});
+            imagePath = `${basePath}${file.filename}`;
+            console.log(req.body)
+    
+            // get and check user
+            const user = await models.user.findByPk(req.body.userId);
+            console.log("Got here!!")   
+            if(!user){
+                return res.status(500).json({success: false, message: 'valid user required'})
+            }
+            const vehicle = await models.vehicle.update({
+                id: randomUUID(),
+                userId: req.body.userId,
+                model: req.body.model,
+                make: req.body.make,
+                image: imagePath,
+                images: imagesPaths,  
+                location: req.body.location,
+                description: req.body.description,
+                price: req.body.price,
+                yearOfManufacture: req.body.yearOfManufacture,
+                color: req.body.color,
+                bodyType: req.body.bodyType,
+                driveTrain: req.body.driveTrain,
+                inspectionCert: req.body.inspectionCert,
+                usage: req.body.usage,
+                transmission: req.body.transmission,
+                engineSize: req.body.engineSize,
+                enginePower: req.body.enginePower,
+                fuelType: req.body.fuelType,
+                steering: req.body.steering,
+                vinNumber: req.body.vinNumber,
+                mileage: req.body.mileage,
+                isVerified: req.body.isVerified,
+                iaDutyPaid: req.body.iaDutyPaid,
+                isSold: req.body.isSold,
+                condition: req.body.condition,
+                accessories: req.body.accessories,
+                additionalFeatures: req.body.additionalFeatures
+            },{
+                where: { id: id}
+            });
+            return res.status(201).json({ vehicle });
+        } catch (error) {
+            return res.status(500).json({error: error.message})
+        }
+    });
 
 
 
