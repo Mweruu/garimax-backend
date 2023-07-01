@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     isVendor: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false
+      defaultValue: true
     },
     phoneNumber: {
       type: DataTypes.STRING,
