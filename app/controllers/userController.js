@@ -129,7 +129,7 @@ router.put('/user/updateProfile/:userId', uploadOptions.single('image'), async (
                 success: false})
         }
         const file = req.file;
-        let profileUrl;
+        let profileUrl='';
         let basePath
         if (file){
             const fileName = file.filename;

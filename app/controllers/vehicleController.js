@@ -176,6 +176,8 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
             let files = [];
             let imagesPaths = [];
             let imagePath = '';
+            let allAccessories = [];
+            const accessories = req.body.accessories.split(',').map((item) => item.trim());
             let basePath;
             if(env === 'production'){
                 basePath = `${req.protocol}://${req.get('host')}/garimax-backend/public/uploads/`;
@@ -187,6 +189,7 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
             files.map((el) => {
                 console.log("Data", el)
                 imagesPaths.push(`${basePath}${el.filename}`);
+                allAccessories.push(accessories); // Push the value directly
             });
             if (!file) return res.status(400).send({message:'No image in the request'});
             imagePath = `${basePath}${file.filename}`;
@@ -234,9 +237,6 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
         } catch (error) {
             return res.status(500).json({error: error.message})
         }
-    });
-
-
-
+});
 
 module.exports = router;
