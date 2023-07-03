@@ -197,7 +197,7 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
     
             // get and check user
             const user = await models.user.findByPk(req.body.userId);
-            console.log("Got here!!")   
+            console.log("Got here!!123")   
             if(!user){
                 return res.status(500).json({success: false, message: 'valid user required'})
             }
@@ -206,8 +206,8 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
                 userId: req.body.userId,
                 model: req.body.model,
                 make: req.body.make,
-                image: imagePath,
-                images: imagesPaths,  
+                // image: imagePath,
+                // images: imagesPaths,  
                 location: req.body.location,
                 description: req.body.description,
                 price: req.body.price,
@@ -228,7 +228,7 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
                 iaDutyPaid: req.body.iaDutyPaid,
                 isSold: req.body.isSold,
                 condition: req.body.condition,
-                accessories: req.body.accessories,
+                accessories: allAccessories,
                 additionalFeatures: req.body.additionalFeatures
             },{
                 where: { id: id}
