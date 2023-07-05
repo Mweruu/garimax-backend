@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 
 const uploadOptions = multer({ storage: storage });
 
-// Create and Save a new User
+// Create and Save a new vehicle
 router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
     console.log(req.body , "image", req.files)
     try {
@@ -55,7 +55,6 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
         files.map((el) => {
             console.log("Data", el)
             imagesPaths.push(`${basePath}${el.filename}`);
-            // allAccessories.push(`${basePath}${el.req.body.accessories}`);
             allAccessories.push(accessories); // Push the value directly
 
         });

@@ -119,7 +119,7 @@ const getSingleUser = async (req, res) => {
     }
 };
 
-router.put('/user/updateProfile/:userId', uploadOptions.single('image'), async (req, res) => {
+router.put('/user/updateProfile/:userId', uploadOptions.single('profileImage'), async (req, res) => {
     const userId = req.params.userId;
     try{
         const userExists = await models.user.findByPk(userId);
@@ -141,13 +141,13 @@ router.put('/user/updateProfile/:userId', uploadOptions.single('image'), async (
             profileUrl = `${basePath}${fileName}`
         }
 
-        console.log(profileUrl);
+        console.log("profileUrl",profileUrl);
         const user = await models.user.update({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
             phoneNumber: req.body.phoneNumber,
-            profileImage: profileUrl || null,
+            profileImage: profileUrl,
             companyUrl: req.body.companyUrl,
             // passwordHash: bycrypt.hashSync(req.body.password, 10)
         }, {
