@@ -13,6 +13,7 @@ const registerSingleUser = async (req, res) => {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
+            isVendor: true,
             phoneNumber: req.body.phoneNumber,
             passwordHash: bycrypt.hashSync(req.body.password, 10)
         });
@@ -20,7 +21,6 @@ const registerSingleUser = async (req, res) => {
             singleVendor = await models.singleVendor.create({
                 userId: user.id,
                 passportNo: req.body.passportNo,
-                isVendor: true,
                 gender: req.body.gender
             });
         }
@@ -44,6 +44,7 @@ const registerCoUser = async (req, res) => {
             lastName: req.body.companyName,
             email: req.body.email,
             phoneNumber: req.body.phoneNumber,
+            isVendor: true,
             passwordHash: bycrypt.hashSync(req.body.password, 10)
         });
         if(user){
@@ -51,7 +52,6 @@ const registerCoUser = async (req, res) => {
                 userId: user.id,
                 companyName: req.body.companyName,
                 kraPin: req.body.kraPin,
-                isVendor: true,
                 dealerLicense: req.body.dealerLicense,
                 address: req.body.address,
                 location: req.body.location
