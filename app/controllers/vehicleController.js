@@ -92,7 +92,7 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
             vinNumber: req.body.vinNumber,
             mileage: req.body.mileage,
             isVerified: req.body.isVerified,
-            iaDutyPaid: req.body.iaDutyPaid,
+            isDutyPaid: req.body.isDutyPaid,
             isSold: req.body.isSold,
             condition: req.body.condition,
             accessories: allAccessories,
@@ -107,6 +107,20 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
 
 // Retrieve all Vehicles from the database.
 router.get('/getVehicles', async (req, res) => {
+    try {
+        const vehicles = await models.vehicle.findAll({
+            include: models.user,
+            order: [['createdAt', 'DESC']]
+            });
+        return res.status(201).json({
+            vehicles,
+        });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+});
+
+router.get('/admin/getVehicles', async (req, res) => {
     try {
         const vehicles = await models.vehicle.findAll({
             include: models.user,
@@ -176,7 +190,11 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
             let imagesPaths = [];
             let imagePath = '';
             let allAccessories = [];
+            console.log(req.body.accessories)
             const accessories = req.body.accessories.split(',').map((item) => item.trim());
+
+            // const accessories = req.body.accessories.map((item) => item);
+
             let basePath;
             if(env === 'production'){
                 basePath = `${req.protocol}://${req.get('host')}/garimax-backend/public/uploads/`;
@@ -224,7 +242,7 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
                 vinNumber: req.body.vinNumber,
                 mileage: req.body.mileage,
                 isVerified: req.body.isVerified,
-                iaDutyPaid: req.body.iaDutyPaid,
+                isDutyPaid: req.body.isDutyPaid,
                 isSold: req.body.isSold,
                 condition: req.body.condition,
                 accessories: allAccessories,
@@ -236,6 +254,37 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
         } catch (error) {
             return res.status(500).json({error: error.message})
         }
+});
+
+router.put('/admin/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
+    const id = req.params.id;
+    console.log("6666666",req.body , "image", req.files,'accesyyso')
+    try {
+        const vehicleExists = await models.vehicle.findByPk(id);
+        if(!vehicleExists) {
+            return res.status(500).json({
+                error: `Vehicle does not exist`,
+                success: false})
+        }
+        let carAssessment = [];
+        console.log('accesso',req.body.assessment)
+        console.log('accesyyso',req.body.verifiedVehicle.isVerified)
+
+        const assessment = req.body.assessment? req.body.assessment:[];
+        
+        carAssessment.push(assessment); // Push the value directly
+        console.log("Got here!!123")   
+       
+        const vehicle = await models.vehicle.update({
+            isVerified: req.body.verifiedVehicle.isVerified,
+            assessment:carAssessment,
+        },{
+            where: { id: id}
+        });
+        return res.status(201).json({ vehicle });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
 });
 
 module.exports = router;

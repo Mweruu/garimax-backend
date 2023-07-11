@@ -101,6 +101,17 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+const adminGetAllUsers = async (req, res) => {
+    try {
+        const users = await models.user.findAll({});
+        return res.status(201).json({
+            users,
+        });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+};
+
 const getSingleUser = async (req, res) => {
     const id = req.params.id;
     try{
@@ -168,5 +179,6 @@ module.exports = {
     loginUser,
     getAllUsers,
     getSingleUser,
+    adminGetAllUsers,
     router
 }

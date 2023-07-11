@@ -6,7 +6,7 @@ const router = Router();
 router.post('/users/register', controllers.userController.registerUser);
 router.post('/users/login', controllers.userController.loginUser);
 router.get('/users', controllers.userController.getAllUsers);
-// router.get('/admin/users', controllers.adminController.getAllUsers);
+router.get('/admin/users', controllers.userController.adminGetAllUsers);
 router.get('/user/:id', controllers.userController.getSingleUser);
 router.post('/singleVendor/register', controllers.vendorController.registerSingleUser); //uploadOptions.single('image'),
 router.post('/coVendor/register', controllers.vendorController.registerCoUser);

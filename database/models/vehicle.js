@@ -112,6 +112,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true
       },
+      assessment: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true
+      },
       additionalFeatures: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true
