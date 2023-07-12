@@ -176,7 +176,7 @@ router.get('/getVendorVehicles/:userId', async (req, res) =>{
 
 router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
         const id = req.params.id;
-        console.log(req.body , "image", req.files)
+        console.log("688866",req.body.isVerified, req.body , "image", req.files)
         try {
             const vehicleExists = await models.vehicle.findByPk(id);
             if(!vehicleExists) {
@@ -241,7 +241,7 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
                 steering: req.body.steering,
                 vinNumber: req.body.vinNumber,
                 mileage: req.body.mileage,
-                isVerified: req.body.isVerified,
+                isVerified: false,
                 isDutyPaid: req.body.isDutyPaid,
                 isSold: req.body.isSold,
                 condition: req.body.condition,
