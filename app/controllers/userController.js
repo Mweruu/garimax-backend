@@ -54,6 +54,29 @@ const registerUser = async (req, res) => {
     }
   }
 
+const registerAdmin = async (req, res) => {
+    try {
+        const userExists = await models.user.findOne({ where: { email: req.body.email } });
+        if(userExists){
+            return res.status(404).json({message: 'Email entered already exists'});
+        }
+        const user = await models.user.create({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            phoneNumber: req.body.phoneNumber,
+            isAdmin: true,
+            passwordHash: bycrypt.hashSync(req.body.password, 10)
+        });
+        console.log(user)
+        return res.status(201).json({
+            user
+        });
+    } catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
+
 // Login User
 const loginUser = async (req, res) => {
     try{
@@ -176,6 +199,7 @@ router.put('/user/updateProfile/:userId', uploadOptions.single('profileImage'), 
 
 module.exports = {
     registerUser,
+    registerAdmin,
     loginUser,
     getAllUsers,
     getSingleUser,
