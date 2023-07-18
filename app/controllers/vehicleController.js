@@ -223,8 +223,8 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
                 userId: req.body.userId,
                 model: req.body.model,
                 make: req.body.make,
-                // image: imagePath,
-                // images: imagesPaths,  
+                image: imagePath,
+                images: imagesPaths,  
                 location: req.body.location,
                 description: req.body.description,
                 price: req.body.price,
@@ -267,9 +267,6 @@ router.put('/admin/updateVehicle/:id', uploadOptions.any(), async (req, res) => 
                 success: false})
         }
         let carAssessment = [];
-        console.log('accesso',req.body.assessment)
-        console.log('accesyyso',req.body.verifiedVehicle.isVerified)
-
         const assessment = req.body.assessment? req.body.assessment:[];
         
         carAssessment.push(assessment); // Push the value directly
