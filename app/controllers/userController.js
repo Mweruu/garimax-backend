@@ -115,7 +115,9 @@ const loginUser = async (req, res) => {
 // Retrieve all User from the database.
 const getAllUsers = async (req, res) => {
     try {
-        const users = await models.user.findAll({});
+        const users = await models.user.findAll({
+            include: [models.copVendor,models.singleVendor]
+        });
         return res.status(201).json({
             users,
         });
@@ -126,7 +128,10 @@ const getAllUsers = async (req, res) => {
 
 const adminGetAllUsers = async (req, res) => {
     try {
-        const users = await models.user.findAll({});
+        const users = await models.user.findAll({
+            include: [models.copVendor,models.singleVendor]
+
+        });
         return res.status(201).json({
             users,
         });
@@ -138,7 +143,9 @@ const adminGetAllUsers = async (req, res) => {
 const getSingleUser = async (req, res) => {
     const id = req.params.id;
     try{
-        const user = await models.user.findByPk(id);
+        const user = await models.user.findByPk(id,{
+            include: [models.copVendor,models.singleVendor]
+        });
         if(!user) {
             return res.status(500).json({
                 error: `User does not exist`,

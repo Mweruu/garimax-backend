@@ -131,9 +131,17 @@ module.exports = (sequelize, DataTypes) => {
     }, {});
         Vehicle.associate = function(models) {
             // associations can be defined here
-            Vehicle.belongsTo(models.user, {
+            Vehicle.belongsTo(models.user,{
                 foreignKey: 'userId'
-              })
+                
+              });
+
+            // Vehicle.hasOne(models.singleVendor, {
+            //   foreignKey: 'userId' });
+            // Vehicle.hasOne(models.copVendor, {
+            //   foreignKey: 'userId' 
+            // });
+               
         };
     return Vehicle;
   };

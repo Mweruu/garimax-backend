@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
         SingleVendor.belongsTo(models.user, {
             foreignKey: 'userId'
           })
+        SingleVendor.belongsTo(models.vehicle, {
+          // foreignKey: 'userId'
+        });
       };
     return SingleVendor;
 };

@@ -109,7 +109,7 @@ router.post('/addVehicle', uploadOptions.any(), async (req, res) => {
 router.get('/getVehicles', async (req, res) => {
     try {
         const vehicles = await models.vehicle.findAll({
-            include: models.user,
+            include:models.user,
             order: [['createdAt', 'DESC']]
             });
         return res.status(201).json({
