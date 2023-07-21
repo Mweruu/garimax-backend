@@ -135,12 +135,6 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'userId'
                 
               });
-
-            // Vehicle.hasOne(models.singleVendor, {
-            //   foreignKey: 'userId' });
-            // Vehicle.hasOne(models.copVendor, {
-            //   foreignKey: 'userId' 
-            // });
                
         };
     return Vehicle;

@@ -144,7 +144,7 @@ const getSingleUser = async (req, res) => {
     const id = req.params.id;
     try{
         const user = await models.user.findByPk(id,{
-            include: [models.copVendor,models.singleVendor]
+            // include: [models.copVendor,models.singleVendor]
         });
         if(!user) {
             return res.status(500).json({

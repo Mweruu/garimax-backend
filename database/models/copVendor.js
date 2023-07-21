@@ -34,9 +34,6 @@ module.exports = (sequelize, DataTypes) => {
         CopVendor.belongsTo(models.user,{
             foreignKey: 'userId'
           });
-        CopVendor.belongsTo(models.vehicle, {
-          foreignKey: 'userId'
-        });
       };
     return CopVendor;
 };
