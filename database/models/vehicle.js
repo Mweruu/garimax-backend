@@ -112,6 +112,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true
       },
+      assessment: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true
+      },
       additionalFeatures: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true
@@ -127,9 +131,11 @@ module.exports = (sequelize, DataTypes) => {
     }, {});
         Vehicle.associate = function(models) {
             // associations can be defined here
-            Vehicle.belongsTo(models.user, {
+            Vehicle.belongsTo(models.user,{
                 foreignKey: 'userId'
-              })
+                
+              });
+               
         };
     return Vehicle;
   };

@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     }, {});
       CopVendor.associate = function(models) {
         // associations can be defined here
-        CopVendor.belongsTo(models.user, {
+        CopVendor.belongsTo(models.user,{
             foreignKey: 'userId'
           });
       };
