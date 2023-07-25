@@ -86,6 +86,9 @@ const loginUser = async (req, res) => {
                 error: `User not found`,
                 success: false})
         }
+        if(!user.confirmed){
+            throw new Error('Please confirm your email to login');
+        }
         if(user && bycrypt.compareSync(req.body.password, user.passwordHash)){
             const secret = process.env.SECRET
             const token = jwt.sign(

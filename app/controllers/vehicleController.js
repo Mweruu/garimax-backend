@@ -258,7 +258,7 @@ router.put('/user/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
 
 router.put('/admin/updateVehicle/:id', uploadOptions.any(), async (req, res) => {
     const id = req.params.id;
-    console.log("6666666",req.body , "image", req.files,'accesyyso')
+    console.log(req.body , "image", req.files,'accesyyso')
     try {
         const vehicleExists = await models.vehicle.findByPk(id);
         if(!vehicleExists) {

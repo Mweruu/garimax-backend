@@ -40,10 +40,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    passwordHash: {
+    passwordHash:{
       type: DataTypes.STRING,
-      allowNull: false
-    },
+      allowNull: false,
+    confirmed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
+  },
     isAdmin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
